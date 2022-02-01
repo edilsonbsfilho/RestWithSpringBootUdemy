@@ -1,10 +1,13 @@
-package br.com.erudio;
+package br.com.erudio.controllers;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import br.com.erudio.Greeting;
 
 /**
  * 
@@ -31,7 +34,7 @@ public class GreetingController {
 	 * @return
 	 */
 	@RequestMapping("/greeting/{name}")
-	public Greeting greetingByName(@RequestParam(value = "name", defaultValue = "Alguém") String name) {
+	public Greeting greetingByName(@PathVariable("name") String name) {
 		return new Greeting(counter.incrementAndGet(), String.format(template, name));
-	}
+	}	
 }
