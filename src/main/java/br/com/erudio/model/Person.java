@@ -2,19 +2,38 @@ package br.com.erudio.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * 
  * @author Edilson
  *
  */
+@Entity
+@Table(name = "person")
 public class Person implements Serializable {
 
 	private static final long serialVersionUID = -276717165117137620L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	
+	@Column(name = "first_name", nullable = false)
 	private String firstName;
+	
+	@Column(name = "last_name", nullable = false)
 	private String lastName;
+	
+	@Column(nullable = false)
 	private String address;
+
+	@Column(nullable = false)
 	private String gender;
 	
 	public Person(long id, String firstName, String lastName, String address, String gender) {
