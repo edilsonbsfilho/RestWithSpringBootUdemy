@@ -1,12 +1,13 @@
 package br.com.erudio.services;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.erudio.exception.ResourceNotFoundException;
 import br.com.erudio.model.Person;
+import br.com.erudio.repository.PersonRepository;
 
 /**
  * 
@@ -16,7 +17,8 @@ import br.com.erudio.model.Person;
 @Service
 public class PersonService {
 	
-	private final AtomicLong counter = new AtomicLong();
+	@Autowired
+	PersonRepository repo;
 	
 	/**
 	 * 
@@ -24,7 +26,7 @@ public class PersonService {
 	 * @return
 	 */
 	public Person create(Person person) {
-		return person;
+		return repo.save(person);
 	}
 	
 	/**
@@ -33,15 +35,26 @@ public class PersonService {
 	 * @return
 	 */
 	public Person update(Person person) {
-		return person;
+		Person entity = repo.findById(person.getId())
+				.orElseThrow(() -> new ResourceNotFoundException("Nenhuma pessoa encontrada para o ID informado."));
+		
+		entity.setFirstName(person.getFirstName());
+		entity.setLastName(person.getLastName());
+		entity.setAddress(person.getAddress());
+		entity.setGender(person.getGender());
+		
+		return repo.saveAndFlush(entity);
 	}
 	
 	/**
 	 * 
 	 * @param id
 	 */
-	public void delete(String id) {
+	public void delete(Long id) {
+		Person person = repo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Nenhuma pessoa encontrada para o ID informado."));
 		
+		repo.delete(person);
 	}
 	
 	/**
@@ -49,9 +62,9 @@ public class PersonService {
 	 * @param id
 	 * @return
 	 */
-	public Person findById(String id) {
-		Person person = mockPerson();
-		return person;
+	public Person findById(Long id) {
+		return repo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Nenhuma pessoa encontrada para o ID informado."));
 	}
 	
 	/**
@@ -59,26 +72,6 @@ public class PersonService {
 	 * @return
 	 */
 	public List<Person> findAll() {
-		
-		List<Person> personList = new ArrayList<>();
-		
-		for (int i = 0; i < 8; i++) {
-			Person person = mockPerson();
-			
-			personList.add(person);
-		}
-		
-		
-		return personList;
-	}
-	
-	private Person mockPerson() {
-		Person person = new Person(
-				counter.incrementAndGet(), 
-				"Joao" + counter.get(), 
-				"Silva", 
-				"Endereço", 
-				"Masculino");
-		return person;
+		return repo.findAll();
 	}
 }
