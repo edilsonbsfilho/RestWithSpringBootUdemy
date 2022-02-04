@@ -19,6 +19,8 @@ import br.com.erudio.vo.PersonVO;
 @Service
 public class PersonService {
 	
+	private static final String MSG_NENHUMA_PESSOA_ENCONTRADA_PARA_O_ID_INFORMADO = "Nenhuma pessoa encontrada para o ID informado.";
+	
 	@Autowired
 	PersonRepository repo;
 	
@@ -39,7 +41,7 @@ public class PersonService {
 	 */
 	public PersonVO update(PersonVO personVO) {
 		Person entity = repo.findById(personVO.getKey())
-				.orElseThrow(() -> new ResourceNotFoundException("Nenhuma pessoa encontrada para o ID informado."));
+				.orElseThrow(() -> new ResourceNotFoundException(MSG_NENHUMA_PESSOA_ENCONTRADA_PARA_O_ID_INFORMADO));
 		
 		entity.setFirstName(personVO.getFirstName());
 		entity.setLastName(personVO.getLastName());
@@ -56,7 +58,7 @@ public class PersonService {
 	 */
 	public void delete(Long id) {
 		Person person = repo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Nenhuma pessoa encontrada para o ID informado."));
+				.orElseThrow(() -> new ResourceNotFoundException(MSG_NENHUMA_PESSOA_ENCONTRADA_PARA_O_ID_INFORMADO));
 		
 		repo.delete(person);
 	}
@@ -68,7 +70,7 @@ public class PersonService {
 	 */
 	public PersonVO findById(Long id) {
 		Person person = repo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Nenhuma pessoa encontrada para o ID informado."));
+				.orElseThrow(() -> new ResourceNotFoundException(MSG_NENHUMA_PESSOA_ENCONTRADA_PARA_O_ID_INFORMADO));
 		return DozerConverter.parseObject(person, PersonVO.class);
 	}
 	
