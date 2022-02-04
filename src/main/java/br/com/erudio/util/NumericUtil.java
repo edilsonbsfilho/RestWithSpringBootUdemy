@@ -1,4 +1,4 @@
-package br.com.erudio.utils;
+package br.com.erudio.util;
 
 /**
  * 

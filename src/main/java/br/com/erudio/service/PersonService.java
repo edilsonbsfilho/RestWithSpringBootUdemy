@@ -1,13 +1,15 @@
-package br.com.erudio.services;
+package br.com.erudio.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.erudio.converter.DozerConverter;
 import br.com.erudio.exception.ResourceNotFoundException;
 import br.com.erudio.model.Person;
 import br.com.erudio.repository.PersonRepository;
+import br.com.erudio.vo.PersonVO;
 
 /**
  * 
@@ -25,8 +27,9 @@ public class PersonService {
 	 * @param person
 	 * @return
 	 */
-	public Person create(Person person) {
-		return repo.save(person);
+	public PersonVO create(PersonVO personVO) {
+		Person person = repo.save(DozerConverter.parseObject(personVO, Person.class));
+		return DozerConverter.parseObject(person, PersonVO.class);
 	}
 	
 	/**
@@ -34,16 +37,17 @@ public class PersonService {
 	 * @param person
 	 * @return
 	 */
-	public Person update(Person person) {
-		Person entity = repo.findById(person.getId())
+	public PersonVO update(PersonVO personVO) {
+		Person entity = repo.findById(personVO.getKey())
 				.orElseThrow(() -> new ResourceNotFoundException("Nenhuma pessoa encontrada para o ID informado."));
 		
-		entity.setFirstName(person.getFirstName());
-		entity.setLastName(person.getLastName());
-		entity.setAddress(person.getAddress());
-		entity.setGender(person.getGender());
+		entity.setFirstName(personVO.getFirstName());
+		entity.setLastName(personVO.getLastName());
+		entity.setAddress(personVO.getAddress());
+		entity.setGender(personVO.getGender());
 		
-		return repo.saveAndFlush(entity);
+		return DozerConverter.parseObject(
+				repo.saveAndFlush(entity), PersonVO.class);
 	}
 	
 	/**
@@ -62,16 +66,18 @@ public class PersonService {
 	 * @param id
 	 * @return
 	 */
-	public Person findById(Long id) {
-		return repo.findById(id)
+	public PersonVO findById(Long id) {
+		Person person = repo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Nenhuma pessoa encontrada para o ID informado."));
+		return DozerConverter.parseObject(person, PersonVO.class);
 	}
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public List<Person> findAll() {
-		return repo.findAll();
+	public List<PersonVO> findAll() {
+		return DozerConverter.parseListObjects(
+				repo.findAll(), PersonVO.class);
 	}
 }

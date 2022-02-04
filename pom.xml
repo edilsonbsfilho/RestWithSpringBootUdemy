@@ -28,6 +28,10 @@
   		<artifactId>spring-boot-starter-data-jpa</artifactId>
   	</dependency>
   	<dependency>
+  		<groupId>org.springframework.hateoas</groupId>
+  		<artifactId>spring-hateoas</artifactId>
+  	</dependency>
+  	<dependency>
   		<groupId>org.springframework.boot</groupId>
   		<artifactId>spring-boot-starter-test</artifactId>
   		<scope>test</scope>
@@ -40,6 +44,27 @@
   		<groupId>mysql</groupId>
   		<artifactId>mysql-connector-java</artifactId>
   	</dependency>
+  	<!-- Migration - Versionamento de banco dados -->
+  	<dependency>
+  		<groupId>org.flywaydb</groupId>
+  		<artifactId>flyway-core</artifactId>
+  	</dependency>  	
+  	<!-- Fazer o "De" -> "Para" de VO para Entidade e Vice Versa -->
+  	<dependency>
+  		<groupId>com.github.dozermapper</groupId>
+  		<artifactId>dozer-core</artifactId>
+  		<version>6.4.1</version>
+  	</dependency>
+  	<!-- Posibilitar Devolver o resultado de um EndPoint no formato XML -->
+  	<dependency>
+  		<groupId>com.fasterxml.jackson.dataformat</groupId>
+  		<artifactId>jackson-dataformat-xml</artifactId>
+  	</dependency>
+  	<!-- Posibilitar Devolver o resultado de um EndPoint no formato YAML -->
+  	<dependency>
+  		<groupId>com.fasterxml.jackson.dataformat</groupId>
+  		<artifactId>jackson-dataformat-yaml</artifactId>
+  	</dependency>
   </dependencies>  
   
   <build>
@@ -47,6 +72,28 @@
   		<plugin>
 	  		<groupId>org.springframework.boot</groupId>
 	  		<artifactId>spring-boot-maven-plugin</artifactId>
+  		</plugin>
+  		<plugin>
+	  		<groupId>org.flywaydb</groupId>
+	  		<artifactId>flyway-maven-plugin</artifactId>
+	  		<configuration>
+	  			<url>jdbc:mysql://localhost:3306/db_udemy?useTimezone=true&amp;serverTimezone=UTC&amp;useSSL=false</url>
+	  			<user>root</user>
+	  			<password>123456</password>
+	  		</configuration>
+	  		<dependencies>
+	  			<dependency>
+	  				<groupId>mysql</groupId>
+	  				<artifactId>mysql-connector-java</artifactId>
+	  				<version>${mysql.version}</version>
+	  				<exclusions>
+	  					<exclusion>
+	  						<groupId>org.slf4j</groupId>
+	  						<artifactId>slf4j-api</artifactId>
+	  					</exclusion>
+	  				</exclusions>
+	  			</dependency>
+	  		</dependencies>
   		</plugin>
   	</plugins>
   </build>

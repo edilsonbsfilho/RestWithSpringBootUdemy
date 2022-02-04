@@ -1,4 +1,4 @@
-package br.com.erudio.controllers;
+package br.com.erudio.controller;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.erudio.exception.UnsupportedMathOperationException;
-import br.com.erudio.utils.NumericUtil;
+import br.com.erudio.util.NumericUtil;
 
 /**
  * 
