@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.erudio.converter.DozerConverter;
 import br.com.erudio.exception.ResourceNotFoundException;
@@ -81,5 +82,18 @@ public class PersonService {
 	public List<PersonVO> findAll() {
 		return DozerConverter.parseListObjects(
 				repo.findAll(), PersonVO.class);
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@Transactional
+	public PersonVO disablePerson(Long id) {
+		repo.disablePerson(id);
+		Person person = repo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException(MSG_NENHUMA_PESSOA_ENCONTRADA_PARA_O_ID_INFORMADO));
+		return DozerConverter.parseObject(person, PersonVO.class);
 	}
 }

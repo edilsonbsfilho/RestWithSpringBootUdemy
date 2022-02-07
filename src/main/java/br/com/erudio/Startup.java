@@ -21,5 +21,12 @@ public class Startup {
 	 */
 	public static void main(String[] args) {
 		SpringApplication.run(Startup.class, args);
+		
+		/*
+		 * BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(16);
+		 * String senha = "admin123"; 
+		 * String senhaCriptografada =
+		 * bCryptPasswordEncoder.encode(senha); System.out.println(senhaCriptografada);
+		 */
 	}
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,14 +17,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.erudio.vo.PersonVO;
 import br.com.erudio.service.PersonService;
+import br.com.erudio.vo.PersonVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * 
  * @author Edilson
  *
  */
+//@CrossOrigin
+@Api(value = "Person Services", description = "EndPoints for Person manipulation", tags = {"Person Services"})
 @RestController
 @RequestMapping("/api/v1/person")
 public class PersonController {
@@ -52,6 +57,7 @@ public class PersonController {
 	 * 
 	 * @return
 	 */
+	@ApiOperation(value = "Find all people recorded")
 	@GetMapping(produces = { "application/json", "application/xml", "application/x-yaml" })
 	public List<PersonVO> findAll() {
 		return personService.findAll();
@@ -86,5 +92,21 @@ public class PersonController {
 	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 		personService.delete(id);
 		return ResponseEntity.ok().build();
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@PatchMapping(value = "/{id}", produces = { "application/json", "application/xml", "application/x-yaml" })
+	public PersonVO disablePerson(@PathVariable("id") Long id) {
+		PersonVO personVO = personService.disablePerson(id);
+		personVO.add(
+				linkTo(
+						methodOn(PersonController.class)
+						.findById(id))
+				.withSelfRel());
+		return personVO;
 	}
 }
