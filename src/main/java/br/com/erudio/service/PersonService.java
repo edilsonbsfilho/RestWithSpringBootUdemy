@@ -1,8 +1,8 @@
 package br.com.erudio.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,11 +77,23 @@ public class PersonService {
 	
 	/**
 	 * 
+	 * @param pageable 
 	 * @return
 	 */
-	public List<PersonVO> findAll() {
-		return DozerConverter.parseListObjects(
-				repo.findAll(), PersonVO.class);
+	public Page<PersonVO> findAll(Pageable pageable) {
+		var page = repo.findAll(pageable);
+		return page.map(this::convertToPersonVO);
+	}
+	
+	/**
+	 * 
+	 * @param name
+	 * @param pageable
+	 * @return
+	 */
+	public Page<PersonVO> findByName(String name, Pageable pageable) {
+		var page = repo.findByName(name, pageable);
+		return page.map(this::convertToPersonVO);
 	}
 	
 	/**
@@ -94,6 +106,10 @@ public class PersonService {
 		repo.disablePerson(id);
 		Person person = repo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(MSG_NENHUMA_PESSOA_ENCONTRADA_PARA_O_ID_INFORMADO));
+		return DozerConverter.parseObject(person, PersonVO.class);
+	}
+	
+	private PersonVO convertToPersonVO(Person person) {
 		return DozerConverter.parseObject(person, PersonVO.class);
 	}
 }

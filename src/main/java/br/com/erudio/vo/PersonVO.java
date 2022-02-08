@@ -14,7 +14,7 @@ import com.github.dozermapper.core.Mapping;
  * @author Edilson
  *
  */
-@JsonPropertyOrder({"id", "address", "first_name", "last_name", "gender", "enabled"})
+@JsonPropertyOrder({"id", "first_name", "last_name", "gender", "address", "enabled"})
 public class PersonVO extends ResourceSupport implements Serializable {
 
 	private static final long serialVersionUID = -276717165117137620L;
