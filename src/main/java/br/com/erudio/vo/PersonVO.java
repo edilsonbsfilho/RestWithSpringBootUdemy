@@ -9,11 +9,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.dozermapper.core.Mapping;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 /**
  * 
  * @author Edilson
  *
  */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 @JsonPropertyOrder({"id", "first_name", "last_name", "gender", "address", "enabled"})
 public class PersonVO extends ResourceSupport implements Serializable {
 
@@ -29,125 +36,5 @@ public class PersonVO extends ResourceSupport implements Serializable {
 	private String address;
 	@JsonIgnore
 	private String gender;
-	private Boolean enabled;
-	
-	public PersonVO() {
-		
-	}
-	
-	public PersonVO(long id, String firstName, String lastName, String address, String gender) {
-		super();
-		this.key = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.address = address;
-		this.gender = gender;
-	}
-
-	public long getKey() {
-		return key;
-	}
-
-	public void setKey(long id) {
-		this.key = id;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-	public Boolean getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + ((enabled == null) ? 0 : enabled.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
-		result = prime * result + (int) (key ^ (key >>> 32));
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PersonVO other = (PersonVO) obj;
-		if (address == null) {
-			if (other.address != null)
-				return false;
-		} else if (!address.equals(other.address))
-			return false;
-		if (enabled == null) {
-			if (other.enabled != null)
-				return false;
-		} else if (!enabled.equals(other.enabled))
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (gender == null) {
-			if (other.gender != null)
-				return false;
-		} else if (!gender.equals(other.gender))
-			return false;
-		if (key != other.key)
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "PersonVO [key=" + key + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address
-				+ ", gender=" + gender + ", enabled=" + enabled + "]";
-	}
-	
+	private Boolean enabled;	
 }

@@ -7,12 +7,15 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.erudio.config.FileStorageConfig;
 import br.com.erudio.exception.FileStorageException;
+import br.com.erudio.exception.MyFileNotFoundException;
 
 /**
  * 
@@ -39,6 +42,11 @@ public class FileStorageService {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param file
+	 * @return
+	 */
 	public String storeFile(MultipartFile file) {
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 		
@@ -51,6 +59,25 @@ public class FileStorageService {
 			return fileName;
 		} catch (Exception e) {
 			throw new FileStorageException("Could not store file" + fileName + ". Please try again.", e);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	public Resource loadFileAsResource(String fileName) {
+		try {
+			Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+			Resource resource = new UrlResource(filePath.toUri());
+			if (resource.exists()) {
+				return resource;
+			} else {
+				throw new MyFileNotFoundException("File " + fileName + "not found.");
+			}
+		} catch (Exception e) {
+			throw new MyFileNotFoundException("File " + fileName + "not found.", e);
 		}
 	}
 	
